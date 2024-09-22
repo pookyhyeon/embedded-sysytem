@@ -1,0 +1,112 @@
+import RPi.GPIO as GPIO
+import time
+import adafruit_dht
+import board
+
+dht_device = adafruit_dht.DHT11(board.D2)
+yled = 18
+gled = 27
+rled = 22
+touchPin = 17
+TRIGER = 24
+ECHO = 23  
+
+currentState = False  
+previousTouchState = GPIO.LOW 
+
+temperature_printed = False
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(yled, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(gled, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(rled, GPIO.OUT, initial=GPIO.LOW)
+GPIO.setup(TRIGER, GPIO.OUT)
+GPIO.setup(ECHO, GPIO.IN)
+GPIO.setup(touchPin, GPIO.IN)
+
+def get_distance():
+    GPIO.output(TRIGER, GPIO.LOW)
+    time.sleep(0.01)
+    GPIO.output(TRIGER, GPIO.HIGH)
+    time.sleep(0.00001)
+    GPIO.output(TRIGER, GPIO.LOW)
+
+    start = time.time()
+    stop = time.time()
+
+    while GPIO.input(ECHO) == GPIO.LOW:
+        start = time.time()
+    while GPIO.input(ECHO) == GPIO.HIGH:
+        stop = time.time()
+
+    elapsed_time = stop - start
+    distance = (elapsed_time * 34300) / 2
+    return round(distance, 2)
+
+def read_sensor_data():
+    try:
+        humidity = dht_device.humidity
+        temperature = dht_device.temperature
+        return humidity, temperature
+    except RuntimeError as e:
+        print(f"RuntimeError! ")
+        time.sleep(2)
+        return read_sensor_data()
+    except Exception as e:
+        print(f"Error ! ")
+        return None, None
+
+try:
+    while True:
+        touchState = GPIO.input(touchPin)
+        
+        if touchState == GPIO.HIGH and previousTouchState == GPIO.LOW:
+            if not currentState:
+                currentState = True
+                print("System operating")
+                if not temperature_printed:
+                    humidity, temperature = read_sensor_data()
+                    if humidity is not None and temperature is not None:
+                        print("Temperature: {:.1f} C".format(temperature))
+                        print("Humidity: {:.1f} %".format(humidity))
+                        temperature_printed = True
+                    else:
+                        print(" sensor error ")
+            else:
+                currentState = False
+                print("System finished.")
+                GPIO.output(yled, GPIO.LOW)
+                GPIO.output(gled, GPIO.LOW)
+                GPIO.output(rled, GPIO.LOW)
+                break  
+
+        if currentState:
+            distance = get_distance()
+            print(f"Distance: {distance} cm")
+
+            if distance > 20:
+                GPIO.output(gled, GPIO.HIGH) 
+                GPIO.output(yled, GPIO.LOW)
+                GPIO.output(rled, GPIO.LOW)
+                print("LED Green ON - Distance > 20 cm")
+            elif 10 < distance <= 20:
+                GPIO.output(gled, GPIO.LOW)
+                GPIO.output(yled, GPIO.HIGH)
+                GPIO.output(rled, GPIO.LOW)
+                print("LED Yellow ON - 10 < Distance <= 20 cm")
+            elif distance <= 10:
+                GPIO.output(gled, GPIO.LOW)
+                GPIO.output(yled, GPIO.LOW)
+                GPIO.output(rled, GPIO.HIGH)
+                print("LED Red ON - Distance <= 10 cm, TOO CLOSE")
+
+        previousTouchState = touchState
+        time.sleep(1)
+
+except KeyboardInterrupt:
+    print("Program interrupted.")
+    
+finally:
+    GPIO.cleanup()
+    print("GPIO cleanup completed. Program has exited.")
