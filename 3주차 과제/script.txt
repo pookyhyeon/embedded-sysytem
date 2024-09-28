@@ -1,0 +1,75 @@
+// Function to update the sensor data on the page
+async function updateSensorData() {
+    try {
+        // Fetch sensor data
+        const sensorResponse = await fetch('/sensors');
+        const sensorData = await sensorResponse.json();
+        
+        // Update the DOM with the fetched data
+        document.getElementById('temperature').innerText = `${sensorData.temperature} C`;
+        document.getElementById('humidity').innerText = `${sensorData.humidity} %`;
+        document.getElementById('distance').innerText = `${sensorData.distance} cm`;
+    } catch (error) {
+        console.error('Error fetching sensor data:', error);
+    }
+}
+
+// Function to update the alert mode status
+async function updateAlertMode() {
+    try {
+        // Fetch alert mode status
+        const touchResponse = await fetch('/touch');
+        const touchData = await touchResponse.json();
+
+        // Update the DOM with the fetched alert mode status
+        document.getElementById('alert-mode').innerText = `Now Alert Mode: ${touchData.sys_mode ? 'On' : 'Off'}`;
+    } catch (error) {
+        console.error('Error fetching alert mode:', error);
+    }
+}
+
+// Function to toggle room light
+async function toggleLight(room) {
+    try {
+        const button = document.getElementById(room);
+        const currentState = button.classList.contains('on');
+
+        // Send a request to toggle the light
+        const response = await fetch('/toggle', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ led: room, state: !currentState }),
+        });
+
+        // Change the button appearance based on the new state
+        if (response.ok) {
+            button.classList.toggle('on', !currentState);
+            button.classList.toggle('off', currentState);
+            button.innerText = `${room.replace('room', 'Room ')} Light: ${currentState ? 'Off' : 'On'}`;
+        }
+    } catch (error) {
+        console.error('Error toggling light:', error);
+    }
+}
+
+// Add event listeners to the light buttons
+document.querySelectorAll('.light-button').forEach(button => {
+    button.addEventListener('click', function() {
+        const room = this.id; // Get the ID of the clicked button
+        console.log(`Button ${room} clicked!`); // Log to verify click
+        toggleLight(room); // Call the toggleLight function
+    });
+});
+
+
+// Initial fetch to update sensor data and alert mode
+updateSensorData();
+updateAlertMode();
+
+// Update data every few seconds
+setInterval(() => {
+    updateSensorData();
+    updateAlertMode();
+}, 5000); // Adjust the interval as needed (5000 ms = 5 seconds)

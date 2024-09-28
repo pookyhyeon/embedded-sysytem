@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='j.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+    <title>Konkuk Dormitory Control System</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Konkuk Dormitory Control System</h1>
+        <div class="sensor-data-box">
+            <h2>Sensor Data</h2>
+            <p>Temperature: <span id="temperature">Loading...</span> </p>
+            <p>Humidity: <span id="humidity">Loading...</span> </p>
+            <p>Distance: <span id="distance">Loading...</span> </p>
+        </div>
+        <p id="alert-mode">Now Alert Mode: Off</p>
+        <div class="light-control">
+            <button id="room1" class="light-button">Room 1 Light: Off</button>
+            <button id="room2" class="light-button">Room 2 Light: Off</button>
+            <button id="room3" class="light-button">Room 3 Light: Off</button>
+        </div>
+    </div>
+</body>
+</html>
