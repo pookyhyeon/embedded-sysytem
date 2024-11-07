@@ -1,19 +1,18 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const buttons = document.querySelectorAll('.control-panel .button');
+    const statusButtons = document.querySelectorAll('.status-button');
     const menuPopup = document.getElementById('menu-popup');
     const addMenuBtn = document.getElementById('add-menu-btn');
     const closePopupBtn = document.getElementById('close-popup-btn');
     let currentTableId = '';
 
-    // ON/OFF toggle functionality
-    buttons.forEach(button => {
+    // ON/OFF toggle functionality for status buttons
+    statusButtons.forEach(button => {
         button.addEventListener('click', () => {
-            const status = button.querySelector('.status');
-            if (status.textContent === 'OFF') {
-                status.textContent = 'ON';
+            if (button.textContent === 'OFF') {
+                button.textContent = 'ON';
                 button.style.backgroundColor = '#cce5ff'; // ON 상태 색상
             } else {
-                status.textContent = 'OFF';
+                button.textContent = 'OFF';
                 button.style.backgroundColor = '#f0f0f0'; // OFF 상태 색상
             }
         });
