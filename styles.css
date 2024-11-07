@@ -52,7 +52,7 @@ hr {
 }
 
 .control-title {
-    margin: 0 0 20px 0;
+    margin: 0px 0 20px 0;
     font-size: 1.5em;
     text-align: center;
 }
@@ -135,8 +135,16 @@ hr {
     background-color: #e0e0e0;
 }
 .right-panel .panel {
+    width: 80%; /* 패널의 너비 */
+    height: 250px; /* 패널의 높이 */
     margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 .right-panel .chart-placeholder {
     height: 200px; /* 크기를 조정하여 충분한 공간 확보 */
     background-color: #f9f9f9;

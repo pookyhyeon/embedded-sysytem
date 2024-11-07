@@ -81,10 +81,19 @@
                 <h3>전력 관리</h3>
                 <div class="chart-placeholder"></div>
             </div>
-            <div class="panel">
-                <h3>매출 관리</h3>
-                <div class="chart-placeholder"></div>
-            </div>
+                <div class="panel">
+                    <h3>매출 관리</h3>
+                    <div class="sales-summary">
+                        <p id="daily-sales">일일 금액: 0원</p>
+                        <button id="view-sales-details-btn" class="view-details-btn">결제 상세 내역</button>
+                        <button id="reset-sales-btn" class="reset-btn">초기화</button>
+                    </div>
+                    <div id="sales-details" class="sales-details" style="display: none;">
+                        <h4>일일 결제 상세 내역</h4>
+                        <ul id="sales-details-list"></ul>
+                    </div>
+                </div>
+            
         </div>
     </div>
 
