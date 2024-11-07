@@ -1,0 +1,138 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 0;
+}
+header {
+    background-color: #f4f4f4;
+    padding: 10px 20px;
+    border-bottom: 2px solid #ddd;
+}
+h2 {
+    margin: 0;
+    font-size: 1.2em;
+}
+.container {
+    display: grid;
+    grid-template-columns: 1.5fr 2fr 1.5fr;
+    gap: 20px;
+    padding: 20px;
+}
+.sidebar, .control-panel, .right-panel .panel, .reservation {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    padding: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.sidebar h3, .control-panel h3, .right-panel h3, .reservation h3 {
+    margin: 0 0 10px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 5px;
+}
+.highlight {
+    color: red;
+    font-weight: bold;
+}
+hr {
+    border: 0;
+    border-top: 1px solid #ddd;
+    margin: 10px 0;
+}
+.control-panel {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.control-panel .button {
+    padding: 10px;
+    margin-bottom: 10px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.payment-btn {
+    background-color: #4CAF50; /* 결제 버튼 색상 */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.payment-btn:hover {
+    background-color: #45a049;
+}
+
+.popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    width: 300px;
+}
+.menu-quantity {
+    width: 50px;
+    margin-left: 5px;
+}
+
+.control-panel .button .status {
+    display: inline-block;
+    margin-left: 10px;
+    font-weight: bold;
+}
+.control-panel .button:hover {
+    background-color: #e0e0e0;
+}
+.right-panel .panel {
+    margin-bottom: 20px;
+}
+.right-panel .chart-placeholder {
+    height: 200px; /* 크기를 조정하여 충분한 공간 확보 */
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+}
+footer {
+    padding: 15px;
+    background-color: #fff;
+    border-top: 2px solid #ddd;
+}
+.reservation {
+    margin-bottom: 0; /* 공백 제거 */
+}
+ol {
+    padding-left: 20px;
+    margin-bottom: 0; /* 공백 제거 */
+}
+.selected-menu-list {
+    list-style-type: none;
+    padding-left: 0;
+    margin-bottom: 10px;
+}
+
+.reset-btn {
+    background-color: #ff6666;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.reset-btn:hover {
+    background-color: #e60000;
+}
