@@ -129,3 +129,47 @@ document.addEventListener('DOMContentLoaded', () => {
         salesDetailsDiv.style.display = 'none'; // Hide details section
     });
 });
+document.addEventListener('DOMContentLoaded', () => {
+    const settleBtn = document.getElementById('settle-btn');
+
+    if (settleBtn) {
+        settleBtn.addEventListener('click', () => {
+            // 일일 금액과 결제 상세 내역 가져오기
+            const dailySales = document.getElementById('daily-sales').textContent;
+            const salesDetailsList = document.getElementById('sales-details-list').innerHTML;
+
+            // 결제 상세 내역이 비어 있는 경우 확인
+            if (!salesDetailsList || salesDetailsList.trim() === '') {
+                alert("결제 메뉴 내역 확인 버튼을 누른 후 정산해주세요.");
+                return;
+            }
+
+            // 로컬 스토리지에 저장
+            localStorage.setItem('dailySales', dailySales);
+            localStorage.setItem('salesDetailsList', salesDetailsList);
+
+            // 정산 페이지로 이동
+            window.location.href = 'settle.html';
+        });
+    }
+});
+
+function removeReservation(button) {
+    const listItem = button.parentElement;
+    listItem.remove();
+}
+
+function addReservation() {
+    const input = document.getElementById('new-reservation');
+    const phoneNumber = input.value.trim();
+    
+    if (phoneNumber) {
+        const list = document.getElementById('reservation-list');
+        const newItem = document.createElement('li');
+        newItem.innerHTML = `${phoneNumber} <button onclick="removeReservation(this)">삭제</button>`;
+        list.appendChild(newItem);
+        input.value = ''; // 입력 필드 초기화
+    } else {
+        alert('전화번호를 입력하세요.');
+    }
+}

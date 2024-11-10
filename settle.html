@@ -1,0 +1,131 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정산 페이지</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 로컬 스토리지에서 데이터 가져오기
+            const dailySales = localStorage.getItem('dailySales') || '0원';
+            const salesDetailsList = localStorage.getItem('salesDetailsList') || '<li>내역이 없습니다.</li>';
+            document.getElementById('daily-sales-summary').textContent = dailySales;
+            document.getElementById('sales-details-container').innerHTML = salesDetailsList;
+        });
+
+        function viewSettlements() {
+            const settlements = JSON.parse(localStorage.getItem('settlements')) || [];
+            const settlementsContainer = document.getElementById('settlements-container');
+            settlementsContainer.innerHTML = '';
+        
+            if (settlements.length > 0) {
+                settlements.forEach((settlement, index) => {
+                    const settlementDiv = document.createElement('div');
+                    settlementDiv.classList.add('settlement-item');
+                    settlementDiv.innerHTML = `
+                        <h4>${settlement.date}</h4>
+                        <p>총 판매액: ${settlement.sales}</p>
+                        <ul>${settlement.details}</ul>
+                        <button onclick="editSettlement(${index})" class="edit-btn">수정</button>
+                        <button onclick="deleteSettlement(${index})" class="delete-btn">삭제</button> <!-- 삭제 버튼 추가 -->
+                    `;
+                    settlementsContainer.appendChild(settlementDiv);
+                });
+            } else {
+                settlementsContainer.innerHTML = '<p>정산 내역이 없습니다.</p>';
+            }
+        }
+        
+        function deleteSettlement(index) {
+            if (confirm("이 정산 내역을 삭제하시겠습니까?")) {
+                let settlements = JSON.parse(localStorage.getItem('settlements')) || [];
+                settlements.splice(index, 1); // 선택한 정산 항목 삭제
+                localStorage.setItem('settlements', JSON.stringify(settlements)); // 로컬 스토리지 업데이트
+                alert("정산 내역이 삭제되었습니다.");
+                viewSettlements(); // 화면 갱신
+            }
+        }
+        
+
+        function editSettlement(index) {
+            const settlements = JSON.parse(localStorage.getItem('settlements')) || [];
+            const settlement = settlements[index];
+            const newDate = prompt("새 날짜를 입력하세요 (예: 2024-11-10):", settlement.date);
+            if (newDate) {
+                settlement.date = newDate;
+                localStorage.setItem('settlements', JSON.stringify(settlements));
+                alert("수정되었습니다.");
+                viewSettlements();
+            }
+        }
+
+        function showTopMenuGraph() {
+            const settlements = JSON.parse(localStorage.getItem('settlements')) || [];
+            const menuCounts = {};
+
+            settlements.forEach(settlement => {
+                const parser = new DOMParser();
+                const detailsDoc = parser.parseFromString(`<ul>${settlement.details}</ul>`, 'text/html');
+                const items = detailsDoc.querySelectorAll('li');
+
+                items.forEach(item => {
+                    const [menuName, quantity] = item.textContent.split(':');
+                    const qty = parseInt(quantity.replace(/[^0-9]/g, ''), 10);
+                    if (menuCounts[menuName]) {
+                        menuCounts[menuName] += qty;
+                    } else {
+                        menuCounts[menuName] = qty;
+                    }
+                });
+            });
+
+            const labels = Object.keys(menuCounts);
+            const data = Object.values(menuCounts);
+
+            const ctx = document.getElementById('topMenuChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '판매량',
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h2>정산 페이지</h2>
+    </header>
+    <div class="summary-container">
+        <h3>일일 금액</h3>
+        <p id="daily-sales-summary">일일 금액을 불러오는 중...</p>
+    </div>
+    <div class="details-container">
+        <h3>결제 상세 내역</h3>
+        <ul id="sales-details-container"></ul>
+    </div>
+    <div class="settlement-section" style="text-align: center; margin-top: 20px;">
+        <button onclick="confirmSettlement()" class="settle-btn">정산하기</button>
+    </div>
+    <div class="view-settlements-section" style="text-align: center; margin-top: 20px;">
+        <button onclick="viewSettlements()" class="view-details-btn">정산 내역 보기</button>
+        <button onclick="showTopMenuGraph()" class="view-details-btn">가장 많이 팔린 메뉴 보기</button>
+    </div>
+    <canvas id="topMenuChart" style="max-width: 600px; margin: 20px auto; display: block;"></canvas>
+    <div id="settlements-container" class="details-container" style="margin-top: 20px;"></div>
+</body>
+</html>

@@ -1,5 +1,7 @@
+/* body 및 기존 스타일 유지 */
 body {
     display: flex;
+    flex-direction: column; /* 수직 정렬 */
     justify-content: center;
     align-items: center;
     height: 100vh;
@@ -7,19 +9,28 @@ body {
     background: transparent;
 }
 
+h1 {
+    font-family: 'Black Han Sans', sans-serif;
+    font-size: 3rem;
+    color: #ffffff; /* 흰색으로 변경 */
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+    margin-bottom: 50px; /* 제목과 로그인 컨테이너 간격 조정 */
+}
+
+/* 로그인 컨테이너 스타일 */
 .login-container {
     width: 300px;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.8); /* 기존 스타일 유지 */
+    background-color: rgba(255, 255, 255, 0.8);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
     position: relative;
     z-index: 1;
 }
 
-
+/* 기타 기존 스타일 */
 .form-group {
     margin-bottom: 15px;
 }
@@ -63,5 +74,5 @@ h2 {
     font-size: 26px;
     margin-bottom: 25px;
     color: #333;
-    font-weight: 400; /* 이 폰트는 기본적으로 굵은 스타일 */
+    font-weight: 400;
 }
