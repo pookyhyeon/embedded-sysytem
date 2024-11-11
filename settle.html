@@ -5,6 +5,43 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        function confirmSettlement() {
+            if (confirm("정산을 완료하시겠습니까?")) {
+                // 현재 일일 금액과 결제 내역 가져오기
+                const dailySales = document.getElementById('daily-sales-summary').textContent;
+                const salesDetails = document.getElementById('sales-details-container').innerHTML;
+        
+                if (dailySales === '0원' || salesDetails.includes('내역이 없습니다.')) {
+                    alert("정산할 데이터가 없습니다.");
+                    return;
+                }
+        
+                // 현재 날짜 가져오기
+                const currentDate = new Date().toISOString().split('T')[0];
+        
+                // 정산 항목 생성
+                const settlements = JSON.parse(localStorage.getItem('settlements')) || [];
+                settlements.push({
+                    date: currentDate,
+                    sales: dailySales,
+                    details: salesDetails
+                });
+        
+                // 로컬 스토리지에 저장
+                localStorage.setItem('settlements', JSON.stringify(settlements));
+        
+                // 일일 금액과 내역 초기화
+                localStorage.setItem('dailySales', '0원');
+                localStorage.setItem('salesDetailsList', '<li>내역이 없습니다.</li>');
+        
+                // 화면 업데이트
+                document.getElementById('daily-sales-summary').textContent = '0원';
+                document.getElementById('sales-details-container').innerHTML = '<li>내역이 없습니다.</li>';
+        
+                alert("정산이 완료되었습니다.");
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', function() {
             // 로컬 스토리지에서 데이터 가져오기
             const dailySales = localStorage.getItem('dailySales') || '0원';

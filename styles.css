@@ -94,14 +94,14 @@ hr {
 
 .back-to-login {
     position: absolute;
-    top: 5px;
+    top:30px;
     right: 10px; /* 왼쪽에서 오른쪽으로 위치 변경 */
 }
 
 .back-button {
     display: inline-block;
     padding: 8px 15px;
-    background-color: #78fa94;
+    background-color: #4CAF50;
     color: #fff;
     text-decoration: none;
     border-radius: 5px;

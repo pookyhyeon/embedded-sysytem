@@ -13,6 +13,7 @@
 </div>
 
     <header>
+        <h1 id="current-time" style="text-align: center; margin-bottom: 0px;"></h1>
         <h2>Login as : 전전전전남친 건대역점</h2>
     </header>
     <div class="container">
@@ -101,61 +102,61 @@
         </div>
     </div>
 
-<div id="menu-popup" class="popup">
-    <h3 id="table-id"></h3>
-    <div id="menu-category">
-        <label>
-            돼지고기 두루치기 (15,000원)
-            <input type="number" min="0" data-price="15000" class="menu-quantity" data-name="돼지고기 삼겹살">
-        </label><br>
-        <label>
-            트러플 크림 파스타 (20,000원)
-            <input type="number" min="0" data-price="20000" class="menu-quantity" data-name="전기 통닭">
-        </label><br>
-        <label>
-            전기통닭 (4,000원)
-            <input type="number" min="0" data-price="4000" class="menu-quantity" data-name="소주">
-        </label><br>
-        <label>
-            흑돼지 삼겹살 (25,000원)
-            <input type="number" min="0" data-price="25000" class="menu-quantity" data-name="트러플 파스타">
-        </label><br>
-        <label>
-            장트리오 스테이크 (10,000원)
-            <input type="number" min="0" data-price="10000" class="menu-quantity" data-name="비빔밥">
-        </label><br>
-        <label>
-           밤 티라미수  (12,000원)
-            <input type="number" min="0" data-price="12000" class="menu-quantity" data-name="김치찌개">
-        </label><br>
-        <label>
-            소주 (11,000원)
-            <input type="number" min="0" data-price="11000" class="menu-quantity" data-name="된장찌개">
-        </label><br>
-        <label>
-            맥주 (13,000원)
-            <input type="number" min="0" data-price="13000" class="menu-quantity" data-name="회덮밥">
-        </label><br>
-        <label>
-            육회 (30,000원)
-            <input type="number" min="0" data-price="30000" class="menu-quantity" data-name="육회">
-        </label><br>
-        <label>
-            갈비찜 (40,000원)
-            <input type="number" min="0" data-price="40000" class="menu-quantity" data-name="갈비찜">
-        </label>
+    <div id="menu-popup" class="popup">
+        <h3 id="table-id"></h3>
+        <div id="menu-category">
+            <label>
+                돼지고기 두루치기 (15,000원)
+                <input type="number" min="0" data-price="15000" class="menu-quantity" data-name="돼지고기 두루치기">
+            </label><br>
+            <label>
+                트러플 크림 파스타 (20,000원)
+                <input type="number" min="0" data-price="20000" class="menu-quantity" data-name="트러플 크림 파스타">
+            </label><br>
+            <label>
+                전기통닭 (4,000원)
+                <input type="number" min="0" data-price="4000" class="menu-quantity" data-name="전기통닭">
+            </label><br>
+            <label>
+                흑돼지 삼겹살 (25,000원)
+                <input type="number" min="0" data-price="25000" class="menu-quantity" data-name="흑돼지 삼겹살">
+            </label><br>
+            <label>
+                장트리오 스테이크 (10,000원)
+                <input type="number" min="0" data-price="10000" class="menu-quantity" data-name="장트리오 스테이크">
+            </label><br>
+            <label>
+                밤 티라미수 (12,000원)
+                <input type="number" min="0" data-price="12000" class="menu-quantity" data-name="밤 티라미수">
+            </label><br>
+            <label>
+                소주 (11,000원)
+                <input type="number" min="0" data-price="11000" class="menu-quantity" data-name="소주">
+            </label><br>
+            <label>
+                맥주 (13,000원)
+                <input type="number" min="0" data-price="13000" class="menu-quantity" data-name="맥주">
+            </label><br>
+            <label>
+                육회 (30,000원)
+                <input type="number" min="0" data-price="30000" class="menu-quantity" data-name="육회">
+            </label><br>
+            <label>
+                건대생 할인 (-1,000원)
+                <input type="number" min="0" data-price="-1000" class="menu-quantity" data-name="건대생 할인">
+            </label>
+        </div>
+        <button id="add-menu-btn">메뉴 추가</button>
+        <button id="close-popup-btn">닫기</button>
     </div>
-    <button id="add-menu-btn">메뉴 추가</button>
-    <button id="close-popup-btn">닫기</button>
-</div>
-
+    
 <footer>
     <div class="reservation">
         <h3>현재 예약 대기 3팀</h3>
         <ol id="reservation-list">
-            <li>010-5323-6282 <span onclick="removeReservation(this)" style="color: red; cursor: pointer;">삭제</span> &nbsp; <span>예약 완료 문자 전송하기</span></li>
-            <li>010-5192-9291 <span onclick="removeReservation(this)" style="color: red; cursor: pointer;">삭제</span> &nbsp; <span>예약 완료 문자 전송하기</span></li>
-            <li>010-7843-3233 <span onclick="removeReservation(this)" style="color: red; cursor: pointer;">삭제</span> &nbsp; <span>예약 완료 문자 전송하기</span></li>
+            <li>010-5323-6282 <span onclick="removeReservation(this)" style="color: red; cursor: pointer;">삭제</span> &nbsp; <span onclick="sendConfirmation()" style="cursor: pointer;">예약 완료 문자 전송하기</span></li>
+            <li>010-5192-9291 <span onclick="removeReservation(this)" style="color: red; cursor: pointer;">삭제</span> &nbsp; <span onclick="sendConfirmation()" style="cursor: pointer;">예약 완료 문자 전송하기</span></li>
+            <li>010-7843-3233 <span onclick="removeReservation(this)" style="color: red; cursor: pointer;">삭제</span> &nbsp; <span onclick="sendConfirmation()" style="cursor: pointer;">예약 완료 문자 전송하기</span></li>
         </ol>
         <input type="text" id="new-reservation" placeholder="전화번호 입력" />
         <button onclick="addReservation()">추가</button>

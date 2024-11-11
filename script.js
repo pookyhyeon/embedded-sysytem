@@ -11,7 +11,25 @@ document.addEventListener('DOMContentLoaded', () => {
     let dailyTotal = 0;
     let salesDetails = {};
     let currentTableId = '';
+    document.addEventListener('DOMContentLoaded', function() {
+        function updateTime() {
+            const now = new Date();
+            const formattedTime = now.toLocaleString('ko-KR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            });
+            document.getElementById('current-time').textContent = formattedTime;
+        }
 
+        // 1초마다 시간 업데이트
+        setInterval(updateTime, 1000);
+        updateTime(); // 페이지 로드 시 즉시 시간 표시
+    });
     // ON/OFF toggle functionality for status buttons
     statusButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -129,6 +147,25 @@ document.addEventListener('DOMContentLoaded', () => {
         salesDetailsDiv.style.display = 'none'; // Hide details section
     });
 });
+document.addEventListener('DOMContentLoaded', function() {
+    function updateTime() {
+        const now = new Date();
+        const formattedTime = now.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+        document.getElementById('current-time').textContent = formattedTime;
+    }
+
+    // 1초마다 시간 업데이트
+    setInterval(updateTime, 1000);
+    updateTime(); // 페이지 로드 시 즉시 시간 표시
+});
 document.addEventListener('DOMContentLoaded', () => {
     const settleBtn = document.getElementById('settle-btn');
 
@@ -166,10 +203,16 @@ function addReservation() {
     if (phoneNumber) {
         const list = document.getElementById('reservation-list');
         const newItem = document.createElement('li');
-        newItem.innerHTML = `${phoneNumber} <button onclick="removeReservation(this)">삭제</button>`;
+        newItem.innerHTML = `${phoneNumber} <button onclick="removeReservation(this)">삭제</button> &nbsp; <button onclick="sendConfirmation()">예약 완료 문자 전송하기</button>`;
         list.appendChild(newItem);
         input.value = ''; // 입력 필드 초기화
     } else {
         alert('전화번호를 입력하세요.');
+    }
+}
+
+function sendConfirmation() {
+    if (confirm("전송하겠습니까?")) {
+        alert("전송이 완료되었습니다.");
     }
 }
