@@ -8,28 +8,69 @@ document.addEventListener('DOMContentLoaded', () => {
     const salesDetailsList = document.getElementById('sales-details-list');
     const salesDetailsDiv = document.getElementById('sales-details');
     const dailySalesElement = document.getElementById('daily-sales');
+    const reservationList = document.getElementById('reservation-list');
+    const newReservationInput = document.getElementById('new-reservation');
+    const reservationCount = document.querySelector('.reservation h3');
     let dailyTotal = 0;
     let salesDetails = {};
     let currentTableId = '';
-    document.addEventListener('DOMContentLoaded', function() {
-        function updateTime() {
-            const now = new Date();
-            const formattedTime = now.toLocaleString('ko-KR', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false
-            });
-            document.getElementById('current-time').textContent = formattedTime;
+    let automationConfigured = false;
+    const automationSettings = {
+        tableLight: false,
+        boundaryMode: false,
+        kitchenLight: false,
+        bathroomLight: false,
+        eveningSwitch: false
+    };
+    window.addReservation = () => {
+        const phoneNumber = newReservationInput.value.trim();
+        if (phoneNumber) {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+                ${phoneNumber} 
+                <span onclick="removeReservation(this)" style="color: red; cursor: pointer;">삭제</span> &nbsp; 
+                <span onclick="sendConfirmation()" style="cursor: pointer;">예약 완료 문자 전송하기</span>
+            `;
+            reservationList.appendChild(listItem);
+            newReservationInput.value = ''; // 입력 필드 초기화
+            updateReservationCount();
+        } else {
+            alert("전화번호를 입력하세요.");
         }
+    };
 
-        // 1초마다 시간 업데이트
-        setInterval(updateTime, 1000);
-        updateTime(); // 페이지 로드 시 즉시 시간 표시
-    });
+    // Function to remove a reservation
+    window.removeReservation = (element) => {
+        element.parentElement.remove();
+        updateReservationCount();
+    };
+
+    // Function to update the reservation count
+    function updateReservationCount() {
+        const count = reservationList.children.length;
+        reservationCount.textContent = `현재 예약 대기 ${count}팀`;
+    }
+
+    // Initial count update
+    updateReservationCount();
+    function updateTime() {
+        const now = new Date();
+        const formattedTime = now.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+        document.getElementById('current-time').textContent = formattedTime;
+    }
+
+    // 1초마다 시간 업데이트
+    setInterval(updateTime, 1000);
+    updateTime(); // 페이지 로드 시 즉시 시간 표시
+
     // ON/OFF toggle functionality for status buttons
     statusButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -61,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const tableSection = document.getElementById(currentTableId);
         const menuList = tableSection.querySelector('.selected-menu-list');
         const totalPriceElement = tableSection.querySelector('.total-price');
-        let total = parseInt(totalPriceElement.textContent.replace(/[^0-9]/g, ''), 10) || 0; // Keep existing total
+        let total = parseInt(totalPriceElement.textContent.replace(/[^0-9]/g, ''), 10) || 0;
 
         menuQuantities.forEach(item => {
             const quantity = parseInt(item.value, 10);
@@ -71,36 +112,32 @@ document.addEventListener('DOMContentLoaded', () => {
             if (quantity > 0) {
                 total += quantity * price;
 
-                // Check if the menu item already exists in the list
                 let existingItem = Array.from(menuList.children).find(listItem =>
                     listItem.textContent.includes(name)
                 );
 
                 if (existingItem) {
-                    // Update the existing item's quantity and price
                     const existingQuantity = parseInt(existingItem.textContent.match(/(\d+)개/)[1], 10);
                     const newQuantity = existingQuantity + quantity;
                     existingItem.textContent = `${name} ${newQuantity}개 (${(newQuantity * price).toLocaleString()}원)`;
                 } else {
-                    // Add a new item to the list
                     const listItem = document.createElement('li');
                     listItem.textContent = `${name} ${quantity}개 (${(quantity * price).toLocaleString()}원)`;
                     menuList.appendChild(listItem);
                 }
 
-                // Update sales details
                 if (salesDetails[name]) {
                     salesDetails[name] += quantity;
                 } else {
                     salesDetails[name] = quantity;
                 }
 
-                item.value = ''; // Reset input after adding
+                item.value = '';
             }
         });
 
         totalPriceElement.textContent = `총 합계: ${total.toLocaleString()}원`;
-        menuPopup.style.display = 'none'; // Close the popup
+        menuPopup.style.display = 'none';
     });
 
     // Reset table and add total to daily sales when payment button is clicked
@@ -112,11 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
             let total = parseInt(totalPriceElement.textContent.replace(/[^0-9]/g, ''), 10) || 0;
 
             if (total > 0) {
-                // Add to daily sales
                 dailyTotal += total;
                 dailySalesElement.textContent = `일일 금액: ${dailyTotal.toLocaleString()}원`;
 
-                // Reset table
                 tableSection.querySelector('.selected-menu-list').innerHTML = '';
                 totalPriceElement.textContent = '총 합계: 0원';
             }
@@ -126,7 +161,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Show or hide sales details
     viewSalesDetailsBtn.addEventListener('click', () => {
         if (salesDetailsDiv.style.display === 'none' || salesDetailsDiv.style.display === '') {
-            salesDetailsList.innerHTML = ''; // Clear previous details
+            salesDetailsList.innerHTML = '';
             for (const [menuItem, quantity] of Object.entries(salesDetails)) {
                 const detailItem = document.createElement('li');
                 detailItem.textContent = `${menuItem}: ${quantity}개`;
@@ -134,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             salesDetailsDiv.style.display = 'block';
         } else {
-            salesDetailsDiv.style.display = 'none'; // Hide details section
+            salesDetailsDiv.style.display = 'none';
         }
     });
 
@@ -142,77 +177,50 @@ document.addEventListener('DOMContentLoaded', () => {
     resetSalesBtn.addEventListener('click', () => {
         dailyTotal = 0;
         dailySalesElement.textContent = '일일 금액: 0원';
-        salesDetails = {}; // Reset sales details
-        salesDetailsList.innerHTML = ''; // Clear displayed details
-        salesDetailsDiv.style.display = 'none'; // Hide details section
+        salesDetails = {};
+        salesDetailsList.innerHTML = '';
+        salesDetailsDiv.style.display = 'none';
     });
+
+// Open the automation settings popup
+// Open the automation settings popup
+document.getElementById('automation-settings-btn').addEventListener('click', () => {
+    const automationPopup = document.getElementById('automation-settings-popup');
+    automationPopup.style.display = 'block';
 });
-document.addEventListener('DOMContentLoaded', function() {
-    function updateTime() {
-        const now = new Date();
-        const formattedTime = now.toLocaleString('ko-KR', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: false
-        });
-        document.getElementById('current-time').textContent = formattedTime;
-    }
 
-    // 1초마다 시간 업데이트
-    setInterval(updateTime, 1000);
-    updateTime(); // 페이지 로드 시 즉시 시간 표시
+// Save settings and close the popup
+document.getElementById('save-automation-settings-btn').addEventListener('click', () => {
+    document.querySelectorAll('.automation-setting').forEach(setting => {
+        const type = setting.getAttribute('data-control-type');
+        automationSettings[type] = setting.checked; // Save the ON/OFF state (true for ON, false for OFF)
+    });
+    automationConfigured = true;
+    alert("자동화 세팅이 완료되었습니다.");
+    document.getElementById('automation-settings-popup').style.display = 'none';
 });
-document.addEventListener('DOMContentLoaded', () => {
-    const settleBtn = document.getElementById('settle-btn');
 
-    if (settleBtn) {
-        settleBtn.addEventListener('click', () => {
-            // 일일 금액과 결제 상세 내역 가져오기
-            const dailySales = document.getElementById('daily-sales').textContent;
-            const salesDetailsList = document.getElementById('sales-details-list').innerHTML;
-
-            // 결제 상세 내역이 비어 있는 경우 확인
-            if (!salesDetailsList || salesDetailsList.trim() === '') {
-                alert("결제 메뉴 내역 확인 버튼을 누른 후 정산해주세요.");
-                return;
+// Function to apply automation settings
+function activateAutomation() {
+    if (automationConfigured) {
+        statusButtons.forEach(button => {
+            const controlType = button.previousElementSibling.textContent.trim();
+            if (automationSettings[controlType] !== undefined) {
+                if (automationSettings[controlType]) {
+                    button.textContent = 'ON';
+                    button.style.backgroundColor = '#cce5ff'; // ON 상태 색상
+                } else {
+                    button.textContent = 'OFF';
+                    button.style.backgroundColor = '#f0f0f0'; // OFF 상태 색상
+                }
             }
-
-            // 로컬 스토리지에 저장
-            localStorage.setItem('dailySales', dailySales);
-            localStorage.setItem('salesDetailsList', salesDetailsList);
-
-            // 정산 페이지로 이동
-            window.location.href = 'settle.html';
         });
-    }
-});
-
-function removeReservation(button) {
-    const listItem = button.parentElement;
-    listItem.remove();
-}
-
-function addReservation() {
-    const input = document.getElementById('new-reservation');
-    const phoneNumber = input.value.trim();
-    
-    if (phoneNumber) {
-        const list = document.getElementById('reservation-list');
-        const newItem = document.createElement('li');
-        newItem.innerHTML = `${phoneNumber} <button onclick="removeReservation(this)">삭제</button> &nbsp; <button onclick="sendConfirmation()">예약 완료 문자 전송하기</button>`;
-        list.appendChild(newItem);
-        input.value = ''; // 입력 필드 초기화
+        alert("설정된 자동화가 실행되었습니다.");
     } else {
-        alert('전화번호를 입력하세요.');
+        alert("자동화 세팅을 먼저 설정하세요.");
     }
 }
 
-function sendConfirmation() {
-    if (confirm("전송하겠습니까?")) {
-        alert("전송이 완료되었습니다.");
-    }
-}
+// Automation button functionality
+document.getElementById('automation-btn').addEventListener('click', activateAutomation);
+});
