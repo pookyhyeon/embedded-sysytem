@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const reservationList = document.getElementById('reservation-list');
     const newReservationInput = document.getElementById('new-reservation');
     const reservationCount = document.querySelector('.reservation h3');
+    
+    let hasViewedSalesDetails = false; // 추가된 변수
     let dailyTotal = 0;
     let salesDetails = {};
     let currentTableId = '';
@@ -22,6 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
         bathroomLight: false,
         eveningSwitch: false
     };
+
+    
     window.addReservation = () => {
         const phoneNumber = newReservationInput.value.trim();
         if (phoneNumber) {
@@ -95,7 +99,20 @@ document.addEventListener('DOMContentLoaded', () => {
     closePopupBtn.addEventListener('click', () => {
         menuPopup.style.display = 'none';
     });
-
+    viewSalesDetailsBtn.addEventListener('click', () => {
+        if (salesDetailsDiv.style.display === 'none' || salesDetailsDiv.style.display === '') {
+            salesDetailsList.innerHTML = ''; // 기존 내용 초기화
+            for (const [menuItem, quantity] of Object.entries(salesDetails)) {
+                const detailItem = document.createElement('li');
+                detailItem.textContent = `${menuItem}: ${quantity}개`;
+                salesDetailsList.appendChild(detailItem);
+            }
+            salesDetailsDiv.style.display = 'block';
+            hasViewedSalesDetails = true; // 결제 내역을 확인했음을 표시
+        } else {
+            salesDetailsDiv.style.display = 'none';
+        }
+    });
     // Add menu items to the sidebar and accumulate them
     addMenuBtn.addEventListener('click', () => {
         const menuQuantities = document.querySelectorAll('.menu-quantity');
@@ -139,7 +156,13 @@ document.addEventListener('DOMContentLoaded', () => {
         totalPriceElement.textContent = `총 합계: ${total.toLocaleString()}원`;
         menuPopup.style.display = 'none';
     });
-
+    function addToSalesDetails(item, quantity) {
+        if (salesDetails[item]) {
+            salesDetails[item] += quantity;
+        } else {
+            salesDetails[item] = quantity;
+        }
+    }
     // Reset table and add total to daily sales when payment button is clicked
     const paymentButtons = document.querySelectorAll('.payment-btn');
     paymentButtons.forEach(button => {
@@ -160,14 +183,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Show or hide sales details
     viewSalesDetailsBtn.addEventListener('click', () => {
+        // salesDetails가 비어 있으면 경고 메시지 출력
+        if (Object.keys(salesDetails).length === 0) {
+            alert("결제 내역이 없습니다.");
+            return;
+        }
+
+        // 결제 내역이 있는 경우 목록을 생성하여 표시
         if (salesDetailsDiv.style.display === 'none' || salesDetailsDiv.style.display === '') {
-            salesDetailsList.innerHTML = '';
+            salesDetailsList.innerHTML = ''; // 기존 내용을 초기화
             for (const [menuItem, quantity] of Object.entries(salesDetails)) {
                 const detailItem = document.createElement('li');
                 detailItem.textContent = `${menuItem}: ${quantity}개`;
                 salesDetailsList.appendChild(detailItem);
             }
             salesDetailsDiv.style.display = 'block';
+            hasViewedSalesDetails = true; // 결제 내역을 확인했음을 표시
         } else {
             salesDetailsDiv.style.display = 'none';
         }
@@ -181,14 +212,29 @@ document.addEventListener('DOMContentLoaded', () => {
         salesDetailsList.innerHTML = '';
         salesDetailsDiv.style.display = 'none';
     });
-    document.getElementById('settle-btn').addEventListener('click', () => {
-        // Implement the desired functionality here
-        // For example, resetting or saving daily sales total
-        alert("정산이 완료되었습니다.");
-        // Add any other logic here as required for your project
+// Add event listener for the "정산" button
+// Function to handle "정산" button click
+document.getElementById('settle-btn').addEventListener('click', () => {
+    if (!hasViewedSalesDetails) {
+        alert("먼저 '결제 메뉴 내역 확인'을 눌러 결제 내역을 확인하세요.");
+        return;
+    }
+
+    const dailySales = dailySalesElement.textContent;
+    let salesDetailsHTML = '';
+
+    salesDetailsList.querySelectorAll('li').forEach(item => {
+        salesDetailsHTML += `<li>${item.textContent}</li>`;
     });
-// Open the automation settings popup
-// Open the automation settings popup
+
+    // 로컬 스토리지에 저장
+    localStorage.setItem('dailySales', dailySales);
+    localStorage.setItem('salesDetailsList', salesDetailsHTML);
+
+    // 정산 페이지로 이동
+    window.location.href = 'settle.html';
+});
+
 document.getElementById('automation-settings-btn').addEventListener('click', () => {
     const automationPopup = document.getElementById('automation-settings-popup');
     automationPopup.style.display = 'block';
