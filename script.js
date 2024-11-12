@@ -181,7 +181,12 @@ document.addEventListener('DOMContentLoaded', () => {
         salesDetailsList.innerHTML = '';
         salesDetailsDiv.style.display = 'none';
     });
-
+    document.getElementById('settle-btn').addEventListener('click', () => {
+        // Implement the desired functionality here
+        // For example, resetting or saving daily sales total
+        alert("정산이 완료되었습니다.");
+        // Add any other logic here as required for your project
+    });
 // Open the automation settings popup
 // Open the automation settings popup
 document.getElementById('automation-settings-btn').addEventListener('click', () => {
