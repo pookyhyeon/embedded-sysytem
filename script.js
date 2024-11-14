@@ -55,6 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
         reservationCount.textContent = `현재 예약 대기 ${count}팀`;
     }
 
+    document.getElementById('reset-sales-btn').addEventListener('click', () => {
+        dailyTotal = 0;
+        dailySalesElement.textContent = '일일 금액: 0원';
+        salesDetails = {};
+        salesDetailsList.innerHTML = '';
+        salesDetailsDiv.style.display = 'none';
+    });
+    
     // Initial count update
     updateReservationCount();
     function updateTime() {
@@ -164,6 +172,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     // Reset table and add total to daily sales when payment button is clicked
+    // Define the resetTable function
+
+function resetTable(tableId) {
+    const tableSection = document.getElementById(tableId);
+    const menuList = tableSection.querySelector('.selected-menu-list');
+    const totalPriceElement = tableSection.querySelector('.total-price');
+
+    // Clear the selected menu list
+    menuList.innerHTML = '';
+
+    // Reset the total price to 0
+    totalPriceElement.textContent = '총 합계: 0원';
+}
+
     const paymentButtons = document.querySelectorAll('.payment-btn');
     paymentButtons.forEach(button => {
         button.addEventListener('click', () => {
