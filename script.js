@@ -55,14 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
         reservationCount.textContent = `현재 예약 대기 ${count}팀`;
     }
 
-    document.getElementById('reset-sales-btn').addEventListener('click', () => {
-        dailyTotal = 0;
-        dailySalesElement.textContent = '일일 금액: 0원';
-        salesDetails = {};
-        salesDetailsList.innerHTML = '';
-        salesDetailsDiv.style.display = 'none';
-    });
-    
     // Initial count update
     updateReservationCount();
     function updateTime() {
@@ -107,20 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     closePopupBtn.addEventListener('click', () => {
         menuPopup.style.display = 'none';
     });
-    viewSalesDetailsBtn.addEventListener('click', () => {
-        if (salesDetailsDiv.style.display === 'none' || salesDetailsDiv.style.display === '') {
-            salesDetailsList.innerHTML = ''; // 기존 내용 초기화
-            for (const [menuItem, quantity] of Object.entries(salesDetails)) {
-                const detailItem = document.createElement('li');
-                detailItem.textContent = `${menuItem}: ${quantity}개`;
-                salesDetailsList.appendChild(detailItem);
-            }
-            salesDetailsDiv.style.display = 'block';
-            hasViewedSalesDetails = true; // 결제 내역을 확인했음을 표시
-        } else {
-            salesDetailsDiv.style.display = 'none';
-        }
-    });
+
     // Add menu items to the sidebar and accumulate them
     addMenuBtn.addEventListener('click', () => {
         const menuQuantities = document.querySelectorAll('.menu-quantity');
@@ -172,20 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     // Reset table and add total to daily sales when payment button is clicked
-    // Define the resetTable function
-
-function resetTable(tableId) {
-    const tableSection = document.getElementById(tableId);
-    const menuList = tableSection.querySelector('.selected-menu-list');
-    const totalPriceElement = tableSection.querySelector('.total-price');
-
-    // Clear the selected menu list
-    menuList.innerHTML = '';
-
-    // Reset the total price to 0
-    totalPriceElement.textContent = '총 합계: 0원';
-}
-
     const paymentButtons = document.querySelectorAll('.payment-btn');
     paymentButtons.forEach(button => {
         button.addEventListener('click', () => {
@@ -225,17 +190,46 @@ function resetTable(tableId) {
             salesDetailsDiv.style.display = 'none';
         }
     });
+/////////////////////////////////reset/////////////////////////////////////////////////////////
+    window.resetTable = (tableId) => {
+        const tableSection = document.getElementById(tableId);
+        const menuList = tableSection.querySelector('.selected-menu-list');
+        const totalPriceElement = tableSection.querySelector('.total-price');
+        
+        // Clear the selected menu list and reset the total price
+        menuList.innerHTML = '';
+        totalPriceElement.textContent = '총 합계: 0원';
+    };
 
-    // Reset daily sales
+    // Function to reset all sales data
     resetSalesBtn.addEventListener('click', () => {
         dailyTotal = 0;
-        dailySalesElement.textContent = '일일 금액: 0원';
         salesDetails = {};
-        salesDetailsList.innerHTML = '';
-        salesDetailsDiv.style.display = 'none';
+        dailySalesElement.textContent = '일일 금액: 0원';
+        salesDetailsList.innerHTML = ''; // Clear sales details list
+        salesDetailsDiv.style.display = 'none'; // Hide sales details
     });
-// Add event listener for the "정산" button
-// Function to handle "정산" button click
+/////////////////////////////////////////////////////////////////////////////////////////////
+//////// 매출 관리 ///////////////////////////////////////////////////////////////
+viewSalesDetailsBtn.addEventListener('click', () => {
+    if (Object.keys(salesDetails).length === 0) {
+        alert("결제 내역이 없습니다.");
+        return;
+    }
+
+    // Populate the sales details list
+    salesDetailsList.innerHTML = '';  // Clear existing content
+    for (const [menuItem, quantity] of Object.entries(salesDetails)) {
+        const detailItem = document.createElement('li');
+        detailItem.textContent = `${menuItem}: ${quantity}개`;
+        salesDetailsList.appendChild(detailItem);
+    }
+
+    // Show the sales details div below the button
+    salesDetailsDiv.style.display = 'block';
+    hasViewedSalesDetails = true;  // Mark as viewed
+});
+
 document.getElementById('settle-btn').addEventListener('click', () => {
     if (!hasViewedSalesDetails) {
         alert("먼저 '결제 메뉴 내역 확인'을 눌러 결제 내역을 확인하세요.");
