@@ -267,6 +267,10 @@ document.getElementById('save-automation-settings-btn').addEventListener('click'
     document.getElementById('automation-settings-popup').style.display = 'none';
 });
 
+function navigateToPowerManagement() {
+    window.location.href = "power.html";
+}
+
 // Function to apply automation settings
 function activateAutomation() {
     if (automationConfigured) {

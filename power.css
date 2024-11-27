@@ -1,0 +1,113 @@
+/* 전체 페이지 기본 스타일 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+/* 헤더 스타일 */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #007bff;
+    color: white;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.back-button {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    border: 1px solid white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 상단 값 표시 컨테이너 */
+.stats-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 800px;
+    border-radius: 8px;
+}
+
+.stat-box {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* 차트 컨테이너 */
+.charts-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.chart {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1000px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.chart h2 {
+    margin-bottom: 20px;
+    font-size: 20px;
+    color: #555;
+}
+
+canvas {
+    max-width: 100%;
+    height: 400px; /* 전력 관리 차트는 크게 설정 */
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .stats-container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .header h1 {
+        font-size: 20px;
+    }
+
+    .back-button {
+        font-size: 14px;
+    }
+
+    .chart {
+        padding: 10px;
+    }
+}

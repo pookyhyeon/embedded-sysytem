@@ -62,10 +62,6 @@
             <h3 class="control-title">식당 센서 제어</h3>
             <div class="sensor-controls">
                 <div class="sensor-item">
-                    <p>테이블 전등 제어</p>
-                    <button class="status-button">OFF</button>
-                </div>
-                <div class="sensor-item">
                     <p>경계 모드</p>
                     <button class="status-button highlight">OFF</button>
                 </div>
@@ -74,23 +70,16 @@
                     <button class="status-button">OFF</button>
                 </div>
                 <div class="sensor-item">
-                    <p>화장실 전등 제어</p>
+                    <p>에어컨 제어</p>
                     <button class="status-button">OFF</button>
                 </div>
-                <div class="sensor-item">
-                    <p>저녁 BAR로 전환</p>
-                    <button class="status-button">ON</button>
-                </div>
+
                 <div class="automation-controls">
                     <button id="automation-btn" class="automation-btn">자동화</button>
                     <button id="automation-settings-btn" class="automation-btn">자동화 세팅</button>
                 </div>
                 <div id="automation-settings-popup" class="popup" style="display: none;">
                     <h3>자동화 설정 (ON 시 클릭) </h3>
-                    <label>
-                        테이블 전등 제어
-                        <input type="checkbox" class="automation-setting" data-control-type="테이블 전등 제어">
-                    </label><br>
                     <label>
                         경계 모드
                         <input type="checkbox" class="automation-setting" data-control-type="경계 모드">
@@ -100,12 +89,8 @@
                         <input type="checkbox" class="automation-setting" data-control-type="주방 전등 제어">
                     </label><br>
                     <label>
-                        화장실 전등 제어
+                        에어컨 제어
                         <input type="checkbox" class="automation-setting" data-control-type="화장실 전등 제어">
-                    </label><br>
-                    <label>
-                        저녁 BAR 로 전환
-                        <input type="checkbox" class="automation-setting" data-control-type="저녁 바로 전환">
                     </label><br>
                     <button id="save-automation-settings-btn">설정 저장</button>
                     <button onclick="document.getElementById('automation-settings-popup').style.display='none'">닫기</button>
@@ -117,8 +102,12 @@
         <div class="right-panel">
             <div class="panel">
                 <h3>전력 관리</h3>
-                <div class="chart-placeholder"></div>
+                <div class="chart-placeholder">
+                    <a href="power.html" class="chart-link">이동</a>
+                </div>
             </div>
+            
+            
                 <div class="panel">
                     <h3>매출 관리</h3>
                     <div class="sales-summary">

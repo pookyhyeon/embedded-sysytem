@@ -164,12 +164,50 @@ hr {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.right-panel .chart-placeholder {
+
+
+.right-panel  {
     height: 200px; /* 크기를 조정하여 충분한 공간 확보 */
     background-color: #f9f9f9;
     border: 1px solid #ccc;
     margin-bottom: 10px;
 }
+
+.chart-placeholder {
+    width: 100%;
+    height: 200px; /* 차트 영역의 높이 */
+    background-color: #f0f0f0; /* 임시 배경색 */
+    border: 1px solid #ccc;
+    position: relative; /* 자식 요소의 위치를 설정할 수 있도록 함 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.chart-text:hover {
+    color: #0056b3;
+}
+
+.chart-placeholder{
+    height: 200px; /* 크기를 조정하여 충분한 공간 확보 */
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+cursor: pointer; /* 클릭 가능하도록 설정 */
+}
+
 footer {
     padding: 15px;
     background-color: #fff;
@@ -217,6 +255,34 @@ ol {
 h3 {
     text-align: center;
 }
+
+.automation-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 50%; /* 센서 아이템 세로 반만큼 높이 */
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.automation-btn {
+    padding: 10px 20px;
+    background-color: #b9b9b9;
+    color: rgb(0, 0, 0);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 80%; /* 센서 아이템과 동일한 가로 크기 */
+    text-align: center;
+    transition: background-color 0.3s;
+}
+
+.automation-btn:hover {
+    background-color: #0056b3;
+}
+
 
 .delete-btn {
     background-color: #d9534f;
